@@ -16,7 +16,7 @@ Core engine (`GomokuGame.java`)
 - Draw detection when the board is full
 - Move counting and per-player longest-streak statistics
 - Per-move time limit with timeout loss (default 30s)
-- Cross-session score tracking: black wins / white wins / draws
+- Cross-round score tracking: black wins / white wins / draws (kept in memory for the current run)
 - `synchronized` methods for thread-safe move and timer updates
 - Board copy accessor to avoid external mutation
 
@@ -41,56 +41,39 @@ JavaFX mode (`GomokuGameFX.java`)
 
 ## Project Structure
 
-com/example/javagomokugame/
-├── GomokuGame.java       # Rules, win check, timer, statistics
-├── GomokuGameConsole.java# Text-based gameplay
-└── GomokuGameFX.java     # JavaFX GUI gameplay
+The source files live at the repository root; they declare
+`package com.example.javagomokugame`, so `javac -d out` produces that package
+layout under `out/`.
+
+    GomokuGame.java        # Rules, win check, timer, statistics
+    GomokuGameConsole.java # Text-based gameplay
+    GomokuGameFX.java      # JavaFX GUI gameplay
 
 ## Requirements
 
 - JDK 17 or 21 (JavaFX 21 recommended)
-- JavaFX SDK or Maven JavaFX plugin
+- JavaFX SDK included via `--module-path` (no Maven project is included)
 
 ## Run console mode
 
-javac com/example/javagomokugame/*.java -d out
+javac *.java -d out
 java -cp out com.example.javagomokugame.GomokuGameConsole
 
 Console input format: `row column` using 1-based indices, e.g. `8 8`.
 Enter `0 0` to quit.
 
-## Run JavaFX mode (Maven, recommended)
-
-If you use Maven, add the JavaFX dependencies and plugin, then:
-
-mvn compile
-mvn javafx:run
-
-Example plugin configuration:
-
-<plugin>
-  <groupId>org.openjfx</groupId>
-  <artifactId>javafx-maven-plugin</artifactId>
-  <version>0.0.8</version>
-  <configuration>
-    <mainClass>com.example.javagomokugame.GomokuGameFX</mainClass>
-  </configuration>
-</plugin>
-
-Then `mvn javafx:run`. [9](@ref)
-
 ## Run JavaFX mode (plain JDK + JavaFX SDK)
 
 # Set JAVA_HOME and JAVAFX_LIB to your JavaFX lib folder
 javac --module-path $JAVAFX_LIB --add-modules javafx.controls \
-  com/example/javagomokugame/*.java -d out
+  *.java -d out
 
 java --module-path $JAVAFX_LIB --add-modules javafx.controls \
   -cp out com.example.javagomokugame.GomokuGameFX
 
 For JavaFX setup, download the SDK matching your JDK and add
 `javafx.controls` (and `javafx.fxml` if used) via `--module-path` /
-`--add-modules`. [10](@ref)
+`--add-modules`.
 
 ## How to play
 
